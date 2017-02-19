@@ -63,7 +63,13 @@ function Dropdawn(options) {
     };
 
     this._onBlur = function(event) {
-        that._checkNodeToBlur(event.relatedTarget || document.querySelector(':focus') || document.activeElement);
+        var node = event.relatedTarget || document.querySelector(':focus');
+
+        if (document.hasFocus() && !node) {
+            node = document.activeElement;
+        }
+
+        that._checkNodeToBlur(node);
     };
 
     if (options.dropdownOpener) {
@@ -135,7 +141,7 @@ Dropdawn.prototype.listenDropdownContainer = function(node) {
 //
 // Touch events used for mobile browsers, in mobile Safari clicks are not propagating unless one of following conditions:
 // 1. Element you clicked have style `cursor: pointer;`
-// 2. Element has onClick listener
+// 2. Element Blur onClick listener
 // Some android devices works better with mouseup :)
 var supportsPassive = false;
 Dropdawn.prototype.listenClickOutside = function() {
