@@ -63,9 +63,7 @@ function Dropdawn(options) {
     };
 
     this._onBlur = function(event) {
-        that._checkNodeToBlur('relatedTarget' in event ?
-            event.relatedTarget : (document.querySelector(':focus') || document.activeElement)
-        );
+        that._checkNodeToBlur(event.relatedTarget || document.querySelector(':focus') || document.activeElement);
     };
 
     if (options.dropdownOpener) {
