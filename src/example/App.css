@@ -1,0 +1,81 @@
+.App {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 80vh;
+}
+
+.App__Menu {
+    width: 400px;
+}
+
+.App__Content {
+    margin-top: 40px;
+}
+
+.Menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Menu__Item {
+    color: #7777ff;
+    font-size: 16px;
+}
+
+.Menu__Item:hover {
+    color: #9999ff;
+}
+
+.Menu__Item_active {
+    color: black!important;
+}
+
+.Dropdown {
+    border: 1px solid #7777ff;
+}
+
+.Dropdown__Button {
+    padding: 8px 10px;
+    padding-right: 20px;
+    background: white;
+    border: 0;
+    color: #7777ff;
+    font-size: 16px;
+}
+
+.Dropdown__ListContainer {
+    position: relative;
+}
+
+.Dropdown__List {
+    position: absolute;
+    border: 1px solid #7777ff;
+    border-top: 0px;
+    left: -1px;
+    right: -1px;
+    top: -1px;
+    z-index: 1;
+    background: white;
+}
+
+.Dropdown__Item {
+    color: #7777ff;
+    font-size: 16px;
+    display: block;
+    width: 100%;
+    padding: 8px 10px;
+    background: transparent;
+    border: 0;
+}
+
+.Dropdown__Item:hover {
+    color: #9999ff;
+    
+}
+
+.Dropdown__Item_active {
+    color: black!important;
+}
