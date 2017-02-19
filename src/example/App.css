@@ -7,7 +7,7 @@
 }
 
 .App__Menu {
-    width: 400px;
+    width: 500px;
 }
 
 .App__Content {
@@ -20,9 +20,14 @@
     align-items: center;
 }
 
+.Menu__Hamburger {
+    display: none;
+}
+
 .Menu__Item {
     color: #7777ff;
     font-size: 16px;
+    margin: 5px 0px;
 }
 
 .Menu__Item:hover {
@@ -35,6 +40,7 @@
 
 .Dropdown {
     border: 1px solid #7777ff;
+    margin: 5px 0px;
 }
 
 .Dropdown__Button {
@@ -44,6 +50,10 @@
     border: 0;
     color: #7777ff;
     font-size: 16px;
+}
+
+.Dropdown__Button:focus {
+    outline: 1 solid blue;
 }
 
 .Dropdown__ListContainer {
@@ -79,3 +89,55 @@
 .Dropdown__Item_active {
     color: black!important;
 }
+
+
+
+@media (max-width: 600px) {
+    .App__Menu {
+        width: 250px;
+    }
+
+    .Menu {
+        display: none;
+        flex-direction: column;
+    }
+
+    .Menu_opened {
+        display: flex;
+    }
+
+    .Menu__Hamburger {
+        display: block;
+        border: 0;
+        border-top: 7px solid black;
+        box-sizing: content-box;
+        height: 14px;
+        background: white;
+        border-bottom: 7px solid black;
+        width: 25px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .Menu__Hamburger:after {
+        position: absolute;
+        top: 6px;
+        height: 7px;
+        background: black;
+        left: 0px;
+        right: 0px;
+        content: '';
+        display: block;
+    }
+
+    .Menu__Hamburger:before {
+        display: block;
+        content: 'click me!';
+        width: 80px;
+        font-size: 20px;
+        left: 120%;
+        top: -2px;
+        position: absolute;
+    }
+}
+
