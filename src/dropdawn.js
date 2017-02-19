@@ -139,16 +139,26 @@ Dropdawn.prototype.listenDropdownContainer = function(node) {
 // 1. Element you clicked have style `cursor: pointer;`
 // 2. Element has onClick listener
 // Some android devices works better with mouseup :)
+var supportsPassive = false;
 Dropdawn.prototype.listenClickOutside = function() {
+    try {
+        var opts = Object.defineProperty({}, 'passive', {
+            get: function() {
+                supportsPassive = true;
+            }
+        });
+        window.addEventListener("test", null, opts);
+    } catch (e) {}
+
     document.documentElement.addEventListener('click', this._onClickOutside, false);
-    document.documentElement.addEventListener('touchend', this._onClickOutside, false);
     document.documentElement.addEventListener('mouseup', this._onClickOutside, false);
+    document.documentElement.addEventListener('touchend', this._onClickOutside, supportsPassive ? { passive: true } : false);
 };
 
 Dropdawn.prototype.clearClickOutside = function() {
     document.documentElement.removeEventListener('click', this._onClickOutside, false);
-    document.documentElement.removeEventListener('touchend', this._onClickOutside, false);
     document.documentElement.removeEventListener('mouseup', this._onClickOutside, false);
+    document.documentElement.removeEventListener('touchend', this._onClickOutside, supportsPassive ? { passive: true } : false);
 };
 
 Dropdawn.prototype.destroy = function() {
