@@ -1,4 +1,8 @@
 
+var NOT_FOCUSED = 0;
+var FOCUSED = 1;
+var FOCUSED_AND_CLICKED = 2;
+
 function Dropdawn(options) {
     if (!(this instanceof Dropdawn)) {
         return new Dropdawn(options);
@@ -22,10 +26,14 @@ function Dropdawn(options) {
 
     this.dropdownNode = null;
     this.dropdownContainer = null;
+    this.buttonFocusState = NOT_FOCUSED;
 
     var that = this;
 
     this._onFocus = function(event) {
+        if (that.buttonFocusState === NOT_FOCUSED) {
+            that.buttonFocusState = FOCUSED;
+        }
         if (options.showOnFocus) {
             options.onShouldOpen();
             that.maybeOpened = true;
@@ -33,11 +41,24 @@ function Dropdawn(options) {
     };
 
     this._onClick = function(event) {
-        options.onShouldOpen();
-        that.maybeOpened = true;
+        if (that.buttonFocusState === NOT_FOCUSED) {
+            event.target.focus();
+        }
+
+        if (that.buttonFocusState !== FOCUSED_AND_CLICKED) {
+            that.buttonFocusState = FOCUSED_AND_CLICKED;
+            options.onShouldOpen();
+            that.maybeOpened = true;
+        } else {
+            options.onShouldClose();
+            that.maybeOpened = false;
+            that.buttonFocusState = FOCUSED;
+        }
     };
 
     this._onClickOutside = function(event) {
+        // Worst case scenario: safari will do blur through click outside,
+        // while other browsers will work correctly through blur
         that._checkNodeToBlur(event.target);
     };
 
@@ -54,19 +75,30 @@ function Dropdawn(options) {
             }
 
             if (that.dropdownContainer && that.dropdownContainer.contains(relatedTarget)) {
+                that.buttonFocusState = NOT_FOCUSED;
                 return;
             }
         }
 
         options.onShouldClose();
         that.maybeOpened = false;
+        that.buttonFocusState = NOT_FOCUSED;
     };
 
     this._onBlur = function(event) {
         var node = event.relatedTarget || document.querySelector(':focus');
-
-        if (document.hasFocus() && !node) {
+        
+        // When activeElement is body — false positive in safari
+        if (document.hasFocus() && !node && document.activeElement !== document.body) {
             node = document.activeElement;
+        }
+
+        // we should not react on lack of node if this document (e.g. current window\tab or iframe) is active
+        // cause it would be null in safari
+        // but if it is null and document is not active — it means that this event caused by user,
+        // when he focused out from whole document, not just element.
+        if (!node && document.hasFocus()) {
+            return;
         }
 
         that._checkNodeToBlur(node);
